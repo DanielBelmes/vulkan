@@ -351,7 +351,6 @@ proc genEnums(node: XmlNode, output: var string) =
 proc genProcs(node: XmlNode, output: var string) =
   echo "Generating Procedures..."
   output.add("\n# Procs\n")
-  output.add("var\n")
   for commands in node.findAll("commands"):
     for command in commands.findAll("command"):
       var vkProc: VkProc
@@ -365,11 +364,11 @@ proc genProcs(node: XmlNode, output: var string) =
       vkProc.rVal = vkProc.rVal.translateType()
 
       # Skip commands that are preloaded
-      if  vkProc.name == "vkCreateInstance" or
-          vkProc.name == "vkEnumerateInstanceExtensionProperties" or
-          vkProc.name == "vkEnumerateInstanceLayerProperties" or
-          vkProc.name == "vkEnumerateInstanceVersion":
-        continue
+      # if  vkProc.name == "vkCreateInstance" or
+      #     vkProc.name == "vkEnumerateInstanceExtensionProperties" or
+      #     vkProc.name == "vkEnumerateInstanceLayerProperties" or
+      #     vkProc.name == "vkEnumerateInstanceVersion":
+      #   continue
 
       for param in command.findAll("param"):
         var vkArg: VkArg
@@ -395,12 +394,12 @@ proc genProcs(node: XmlNode, output: var string) =
         vkProc.args.add(vkArg)
 
       vkProcs.add(vkProc)
-      output.add("  {vkProc.name}*: proc(".fmt)
+      output.add("proc {vkProc.name}*(".fmt)
       for arg in vkProc.args:
         if not output.endsWith('('):
           output.add(", ")
         output.add("{arg.name}: {arg.argType}".fmt)
-      output.add("): {vkProc.rval} {{.stdcall.}}\n".fmt)
+      output.add("): {vkProc.rval} {{.cdecl, importc, dynlib: vkDLL.}}\n".fmt)
 
 proc genFeatures(node: XmlNode, output: var string) =
   echo "Generating and Adding Features..."
@@ -488,10 +487,10 @@ proc main() =
   xml.genTypes(output)
   xml.genConstructors(output)
   xml.genProcs(output)
-  xml.genFeatures(output)
-  xml.genExtensions(output)
+  #xml.genFeatures(output)
+  #xml.genExtensions(output)
 
-  output.add("\n" & vkInit)
+  #output.add("\n" & vkInit)
 
   writeFile("src/vulkan.nim", output)
 
