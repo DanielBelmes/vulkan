@@ -111,7 +111,7 @@ proc genDefines(define: XmlNode, output: var string) =
     output.add("\ntemplate vkVersionPatch*(version: untyped): untyped =\n")
     output.add("  ((uint32)(version) and 0x00000FFF)\n")
   elif name == "VK_API_VERSION_1_0":
-    output.add("\nconst VK_API_VERSION_1_0* = vkMakeVersion(1, 0, 0)\n")
+    output.add("const VK_API_VERSION_1_0* = vkMakeVersion(1, 0, 0)\n")
   elif name == "VK_API_VERSION_1_1":
     output.add("const VK_API_VERSION_1_1* = vkMakeVersion(1, 1, 0)\n")
   elif name == "VK_API_VERSION_1_2":
@@ -122,6 +122,27 @@ proc genDefines(define: XmlNode, output: var string) =
     output.add("const VK_HEADER_VERSION_COMPLETE* = vkMakeVersion(1, 2, VK_HEADER_VERSION)\n")
   elif name == "VK_NULL_HANDLE":
     output.add("const VK_NULL_HANDLE* = 0\n")
+  elif name == "VK_MAKE_API_VERSION":
+    output.add("\ntemplate vkMakeApiVersion*(variant, major, minor, patch: untyped): untyped =\n")
+    output.add("  (((variant) shl 29) or ((major) shl 22) or ((minor) shl 12) or (patch))\n")
+  elif name == "VK_API_VERSION_VARIANT":
+    output.add("\ntemplate vkApiVersionVariant*(version: untyped): untyped =\n")
+    output.add("  ((uint32)(version) shr 29)\n")
+  elif name == "VK_API_VERSION_MAJOR":
+    output.add("\ntemplate vkApiVersionMajor*(version: untyped): untyped =\n")
+    output.add("  (((uint32)(version) shr 22) and 0x000007FU)\n")
+  elif name == "VK_API_VERSION_MINOR":
+    output.add("\ntemplate vkApiVersionMinor*(version: untyped): untyped =\n")
+    output.add("  (((uint32)(version) shr 12) and 0x000003FF)\n")
+  elif name == "VK_API_VERSION_PATCH":
+    output.add("\ntemplate vkApiVersionPatch*(version: untyped): untyped =\n")
+    output.add("  ((uint32)(version) and 0x00000FFF)\n")
+  elif name == "VKSC_API_VARIANT":
+    output.add("\nconst VKSC_API_VARIANT* = 1\n")
+  elif name == "VK_API_VERSION_1_3":
+    output.add("const VK_API_VERSION_1_3* = vkMakeApiVersion(0, 1, 3, 0)\n")
+  elif name == "VKSC_API_VERSION_1_0":
+    output.add("const VK_API_VERSION_1_0* = vkMakeApiVersion(VKSC_API_VARIANT, 1, 0, 0)\n")
   else:
     echo "category:define not found {name}".fmt
 

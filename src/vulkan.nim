@@ -79,9 +79,27 @@ template vkVersionMinor*(version: untyped): untyped =
 template vkVersionPatch*(version: untyped): untyped =
   ((uint32)(version) and 0x00000FFF)
 
+template vkMakeApiVersion*(variant, major, minor, patch: untyped): untyped =
+  (((variant) shl 29) or ((major) shl 22) or ((minor) shl 12) or (patch))
+
+template vkApiVersionVariant*(version: untyped): untyped =
+  ((uint32)(version) shr 29)
+
+template vkApiVersionMajor*(version: untyped): untyped =
+  (((uint32)(version) shr 22) and 0x000007FU)
+
+template vkApiVersionMinor*(version: untyped): untyped =
+  (((uint32)(version) shr 12) and 0x000003FF)
+
+template vkApiVersionPatch*(version: untyped): untyped =
+  ((uint32)(version) and 0x00000FFF)
+
+const VKSC_API_VARIANT* = 1
 const VK_API_VERSION_1_0* = vkMakeVersion(1, 0, 0)
 const VK_API_VERSION_1_1* = vkMakeVersion(1, 1, 0)
 const VK_API_VERSION_1_2* = vkMakeVersion(1, 2, 0)
+const VK_API_VERSION_1_3* = vkMakeApiVersion(0, 1, 3, 0)
+const VK_API_VERSION_1_0* = vkMakeApiVersion(VKSC_API_VARIANT, 1, 0, 0)
 const VK_HEADER_VERSION* = 152
 const VK_HEADER_VERSION_COMPLETE* = vkMakeVersion(1, 2, VK_HEADER_VERSION)
 type VkSampleMask* = distinct uint32
