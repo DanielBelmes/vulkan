@@ -178,7 +178,7 @@ proc genConstructors(s: XmlNode, output: var string) =
   output.add("proc new{sname}*(".fmt)
   for member in s.findAll("member"):
     if member.attr("api") == "vulkansc":
-        return
+        continue
     var name = member.child("name").innerText
     if keywords.contains(name):
       name = "`{name}`".fmt
@@ -300,7 +300,7 @@ proc genFuncPointer(funcpointer: XmlNode, output: var string) =
   elif name == "PFN_vkDebugUtilsMessengerCallbackEXT":
     output.add("type PFN_vkDebugUtilsMessengerCallbackEXT* = proc(messageSeverity: VkDebugUtilsMessageSeverityFlagBitsEXT, messageTypes: VkDebugUtilsMessageTypeFlagsEXT, pCallbackData: VkDebugUtilsMessengerCallbackDataEXT, userData: pointer): VkBool32 {.cdecl.}\n"):
   elif name == "PFN_vkFaultCallbackFunction":
-    output.add("type PFN_vkFaultCallbackFunction* = proc(unrecordedFaults: VkBool32, faultCount: ucint, pFaults: pointer) {.cdecl.}\n"):
+    output.add("type PFN_vkFaultCallbackFunction* = proc(unrecordedFaults: VkBool32, faultCount: uint32, pFaults: pointer) {.cdecl.}\n"):
   elif name == "PFN_vkDeviceMemoryReportCallbackEXT":
     output.add("type PFN_vkDeviceMemoryReportCallbackEXT* = proc(pCallbackData: VkDeviceMemoryReportCallbackDataEXT, pUserData: pointer) {.cdecl.}\n"):
   elif name == "PFN_vkGetInstanceProcAddrLUNARG":

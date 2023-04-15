@@ -651,7 +651,7 @@ type PFN_vkFreeFunction* = proc(pUserData: pointer; pMemory: pointer) {.cdecl.}
 type PFN_vkVoidFunction* = proc() {.cdecl.}
 type PFN_vkDebugReportCallbackEXT* = proc(flags: VkDebugReportFlagsEXT; objectType: VkDebugReportObjectTypeEXT; cbObject: uint64; location: csize_t; messageCode:  int32; pLayerPrefix: cstring; pMessage: cstring; pUserData: pointer): VkBool32 {.cdecl.}
 type PFN_vkDebugUtilsMessengerCallbackEXT* = proc(messageSeverity: VkDebugUtilsMessageSeverityFlagBitsEXT, messageTypes: VkDebugUtilsMessageTypeFlagsEXT, pCallbackData: VkDebugUtilsMessengerCallbackDataEXT, userData: pointer): VkBool32 {.cdecl.}
-type PFN_vkFaultCallbackFunction* = proc(unrecordedFaults: VkBool32, faultCount: ucint, pFaults: pointer) {.cdecl.}
+type PFN_vkFaultCallbackFunction* = proc(unrecordedFaults: VkBool32, faultCount: uint32, pFaults: pointer) {.cdecl.}
 type PFN_vkDeviceMemoryReportCallbackEXT* = proc(pCallbackData: VkDeviceMemoryReportCallbackDataEXT, pUserData: pointer) {.cdecl.}
 type PFN_vkGetInstanceProcAddrLUNARG* = proc(instance: VkInstance, pName: cstring) {.cdecl.}
 type VkBaseOutStructure* = object
@@ -1569,7 +1569,17 @@ type VkPipelineShaderStageCreateInfo* = object
   pName*: cstring
   pSpecializationInfo*: ptr VkSpecializationInfo
 
-proc newVkPipelineShaderStageCreateInfo*(sType: VkStructureType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO, pNext: pointer = nil, flags: VkPipelineShaderStageCreateFlags = 0.VkPipelineShaderStageCreateFlags, stage: VkShaderStageFlagBits, module: VkShaderModule, pName: cstringtype VkComputePipelineCreateInfo* = object
+proc newVkPipelineShaderStageCreateInfo*(sType: VkStructureType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO, pNext: pointer = nil, flags: VkPipelineShaderStageCreateFlags = 0.VkPipelineShaderStageCreateFlags, stage: VkShaderStageFlagBits, module: VkShaderModule, pName: cstring, pSpecializationInfo: ptr VkSpecializationInfo): VkPipelineShaderStageCreateInfo =
+  result.sType = sType
+  result.pNext = pNext
+  result.flags = flags
+  result.stage = stage
+  result.module = module
+  result.pName = pName
+  result.pName = pName
+  result.pSpecializationInfo = pSpecializationInfo
+
+type VkComputePipelineCreateInfo* = object
   sType*: VkStructureType
   pNext*: pointer
   flags*: VkPipelineCreateFlags
@@ -1844,14 +1854,44 @@ type VkGraphicsPipelineCreateInfo* = object
   basePipelineHandle*: VkPipeline
   basePipelineIndex*: int32
 
-proc newVkGraphicsPipelineCreateInfo*(sType: VkStructureType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO, pNext: pointer = nil, flags: VkPipelineCreateFlags = 0.VkPipelineCreateFlags, stageCount: uint32, pStages: ptr VkPipelineShaderStageCreateInfotype VkPipelineCacheCreateInfo* = object
+proc newVkGraphicsPipelineCreateInfo*(sType: VkStructureType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO, pNext: pointer = nil, flags: VkPipelineCreateFlags = 0.VkPipelineCreateFlags, stageCount: uint32, pStages: ptr VkPipelineShaderStageCreateInfo, pVertexInputState: ptr VkPipelineVertexInputStateCreateInfo, pInputAssemblyState: ptr VkPipelineInputAssemblyStateCreateInfo, pTessellationState: ptr VkPipelineTessellationStateCreateInfo, pViewportState: ptr VkPipelineViewportStateCreateInfo, pRasterizationState: ptr VkPipelineRasterizationStateCreateInfo, pMultisampleState: ptr VkPipelineMultisampleStateCreateInfo, pDepthStencilState: ptr VkPipelineDepthStencilStateCreateInfo, pColorBlendState: ptr VkPipelineColorBlendStateCreateInfo, pDynamicState: ptr VkPipelineDynamicStateCreateInfo, layout: VkPipelineLayout, renderPass: VkRenderPass, subpass: uint32, basePipelineHandle: VkPipeline, basePipelineIndex: int32): VkGraphicsPipelineCreateInfo =
+  result.sType = sType
+  result.pNext = pNext
+  result.flags = flags
+  result.stageCount = stageCount
+  result.pStages = pStages
+  result.pStages = pStages
+  result.pVertexInputState = pVertexInputState
+  result.pInputAssemblyState = pInputAssemblyState
+  result.pTessellationState = pTessellationState
+  result.pViewportState = pViewportState
+  result.pRasterizationState = pRasterizationState
+  result.pMultisampleState = pMultisampleState
+  result.pDepthStencilState = pDepthStencilState
+  result.pColorBlendState = pColorBlendState
+  result.pDynamicState = pDynamicState
+  result.layout = layout
+  result.renderPass = renderPass
+  result.subpass = subpass
+  result.basePipelineHandle = basePipelineHandle
+  result.basePipelineIndex = basePipelineIndex
+
+type VkPipelineCacheCreateInfo* = object
   sType*: VkStructureType
   pNext*: pointer
   flags*: VkPipelineCacheCreateFlags
   initialDataSize*: uint
   pInitialData*: pointer
 
-proc newVkPipelineCacheCreateInfo*(sType: VkStructureType = VK_STRUCTURE_TYPE_PIPELINE_CACHE_CREATE_INFO, pNext: pointer = nil, flags: VkPipelineCacheCreateFlags = 0.VkPipelineCacheCreateFlags, initialDataSize: uinttype VkPipelineCacheHeaderVersionOne* = object
+proc newVkPipelineCacheCreateInfo*(sType: VkStructureType = VK_STRUCTURE_TYPE_PIPELINE_CACHE_CREATE_INFO, pNext: pointer = nil, flags: VkPipelineCacheCreateFlags = 0.VkPipelineCacheCreateFlags, initialDataSize: uint, pInitialData: pointer = nil): VkPipelineCacheCreateInfo =
+  result.sType = sType
+  result.pNext = pNext
+  result.flags = flags
+  result.initialDataSize = initialDataSize
+  result.initialDataSize = initialDataSize
+  result.pInitialData = pInitialData
+
+type VkPipelineCacheHeaderVersionOne* = object
   headerSize*: uint32
   headerVersion*: VkPipelineCacheHeaderVersion
   vendorID*: uint32
@@ -2967,7 +3007,28 @@ type VkSwapchainCreateInfoKHR* = object
   clipped*: VkBool32
   oldSwapchain*: VkSwapchainKHR
 
-proc newVkSwapchainCreateInfoKHR*(sType: VkStructureType = VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR, pNext: pointer = nil, flags: VkSwapchainCreateFlagsKHR = 0.VkSwapchainCreateFlagsKHR, surface: VkSurfaceKHR, minImageCount: uint32, imageFormat: VkFormat, imageColorSpace: VkColorSpaceKHR, imageExtent: VkExtent2D, imageArrayLayers: uint32, imageUsage: VkImageUsageFlags, imageSharingMode: VkSharingMode, queueFamilyIndexCount: uint32, pQueueFamilyIndices: ptr uint32, preTransform: VkSurfaceTransformFlagBitsKHR, compositeAlpha: VkCompositeAlphaFlagBitsKHR, presentMode: VkPresentModeKHR, clipped: VkBool32, oldSwapchain: VkSwapchainKHRtype VkPresentInfoKHR* = object
+proc newVkSwapchainCreateInfoKHR*(sType: VkStructureType = VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR, pNext: pointer = nil, flags: VkSwapchainCreateFlagsKHR = 0.VkSwapchainCreateFlagsKHR, surface: VkSurfaceKHR, minImageCount: uint32, imageFormat: VkFormat, imageColorSpace: VkColorSpaceKHR, imageExtent: VkExtent2D, imageArrayLayers: uint32, imageUsage: VkImageUsageFlags, imageSharingMode: VkSharingMode, queueFamilyIndexCount: uint32, pQueueFamilyIndices: ptr uint32, preTransform: VkSurfaceTransformFlagBitsKHR, compositeAlpha: VkCompositeAlphaFlagBitsKHR, presentMode: VkPresentModeKHR, clipped: VkBool32, oldSwapchain: VkSwapchainKHR): VkSwapchainCreateInfoKHR =
+  result.sType = sType
+  result.pNext = pNext
+  result.flags = flags
+  result.surface = surface
+  result.minImageCount = minImageCount
+  result.imageFormat = imageFormat
+  result.imageColorSpace = imageColorSpace
+  result.imageExtent = imageExtent
+  result.imageArrayLayers = imageArrayLayers
+  result.imageUsage = imageUsage
+  result.imageSharingMode = imageSharingMode
+  result.queueFamilyIndexCount = queueFamilyIndexCount
+  result.pQueueFamilyIndices = pQueueFamilyIndices
+  result.preTransform = preTransform
+  result.compositeAlpha = compositeAlpha
+  result.presentMode = presentMode
+  result.clipped = clipped
+  result.oldSwapchain = oldSwapchain
+  result.oldSwapchain = oldSwapchain
+
+type VkPresentInfoKHR* = object
   sType*: VkStructureType
   pNext*: pointer
   waitSemaphoreCount*: uint32
@@ -13390,7 +13451,19 @@ type VkCommandBufferInheritanceRenderingInfo* = object
   stencilAttachmentFormat*: VkFormat
   rasterizationSamples*: VkSampleCountFlagBits
 
-proc newVkCommandBufferInheritanceRenderingInfo*(sType: VkStructureType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_INHERITANCE_RENDERING_INFO, pNext: pointer = nil, flags: VkRenderingFlags = 0.VkRenderingFlags, viewMask: uint32, colorAttachmentCount: uint32type VkCommandBufferInheritanceRenderingInfoKHR* = object
+proc newVkCommandBufferInheritanceRenderingInfo*(sType: VkStructureType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_INHERITANCE_RENDERING_INFO, pNext: pointer = nil, flags: VkRenderingFlags = 0.VkRenderingFlags, viewMask: uint32, colorAttachmentCount: uint32, pColorAttachmentFormats: ptr VkFormat, depthAttachmentFormat: VkFormat, stencilAttachmentFormat: VkFormat, rasterizationSamples: VkSampleCountFlagBits): VkCommandBufferInheritanceRenderingInfo =
+  result.sType = sType
+  result.pNext = pNext
+  result.flags = flags
+  result.viewMask = viewMask
+  result.colorAttachmentCount = colorAttachmentCount
+  result.colorAttachmentCount = colorAttachmentCount
+  result.pColorAttachmentFormats = pColorAttachmentFormats
+  result.depthAttachmentFormat = depthAttachmentFormat
+  result.stencilAttachmentFormat = stencilAttachmentFormat
+  result.rasterizationSamples = rasterizationSamples
+
+type VkCommandBufferInheritanceRenderingInfoKHR* = object
 
 type VkAttachmentSampleCountInfoAMD* = object
   sType*: VkStructureType
