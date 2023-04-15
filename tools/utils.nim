@@ -1,6 +1,7 @@
 # Written by Leonardo Mariscal <leo@ldmd.mx>, 2019
 
 const srcHeader* = """
+{.experimental: "codeReordering".}
 # Written by Leonardo Mariscal <leo@ldmd.mx>, 2019
 
 ## Vulkan Bindings
@@ -8,7 +9,6 @@ const srcHeader* = """
 ## WARNING: This is a generated file. Do not edit
 ## Any edits will be overwritten by the generator.
 
-var vkGetProc: proc(procName: cstring): pointer {.cdecl.}
 var currInst: pointer = nil
 
 when not defined(vkCustomLoader):
@@ -28,28 +28,18 @@ when not defined(vkCustomLoader):
   if isNil(vkHandleDLL):
     quit("could not load: " & vkDLL)
 
-  let vkGetProcAddress = cast[proc(inst: pointer, s: cstring): pointer {.stdcall.}](symAddr(vkHandleDLL, "vkGetInstanceProcAddr"))
-  if vkGetProcAddress == nil:
-    quit("failed to load `vkGetInstanceProcAddr` from " & vkDLL)
-
-  vkGetProc = proc(procName: cstring): pointer {.cdecl.} =
-    when defined(windows):
-      result = vkGetProcAddress(currInst, procName)
-      if result != nil:
-        return
-    result = symAddr(vkHandleDLL, procName)
-    if result == nil:
-      raiseInvalidLibrary(procName)
-
-proc setVKGetProc*(getProc: proc(procName: cstring): pointer {.cdecl.}) =
-  vkGetProc = getProc
-
 type
   VkHandle* = int64
   VkNonDispatchableHandle* = int64
   ANativeWindow = ptr object
   CAMetalLayer = ptr object
   AHardwareBuffer = ptr object
+  MTLDevice_id = ptr object
+  MTLCommandQueue_id = ptr object
+  MTLBuffer_id = ptr object
+  MTLTexture_id = ptr object
+  MTLSharedEvent_id = ptr object
+  IOSurfaceRef = ptr object
 """
 
 const vkInit* = """

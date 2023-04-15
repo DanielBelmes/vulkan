@@ -1,4 +1,4 @@
-import nimgl/vulkan
+import vulkan
 import sets
 import bitops
 
@@ -32,9 +32,6 @@ const
   HEIGHT* = 600
   VK_NULL_HANDLE = 0
 
-loadVK_KHR_surface()
-loadVK_KHR_swapchain()
-
 proc checkValidationLayers() =
   var layerCount: uint32 = 0
   discard vkEnumerateInstanceLayerProperties(layerCount.addr, nil)
@@ -44,7 +41,7 @@ proc checkValidationLayers() =
   for validate in validationLayers:
     var found = false
     for layer in layers:
-      if cstring(layer.layerName.unsafeAddr) == validate:
+      if layer.layerName == validate:
         found = true
         break
     if not found:
@@ -121,7 +118,7 @@ proc checkDeviceExtensionSupport(pDevice: VkPhysicalDevice): bool =
 
   var requiredExts = deviceExtensions.toHashSet
   for ext in availableExts.mitems:
-    requiredExts.excl($ ext.extensionName.addr)
+    requiredExts.excl($ext.extensionName)
   requiredExts.len == 0
 
 proc querySwapChainSupport(pDevice: VkPhysicalDevice, surface: VkSurfaceKHR): SwapChainSupportDetails =
@@ -162,7 +159,7 @@ proc createInstance(glfwExtensions: cstringArray, glfwExtensionCount: uint32): V
     applicationVersion = vkMakeVersion(1, 0, 0),
     pEngineName = "No Engine",
     engineVersion = vkMakeVersion(1, 0, 0),
-    apiVersion = vkApiVersion1_1
+    apiVersion = VK_API_VERSION_1_1
   )
 
   var instanceCreateInfo = newVkInstanceCreateInfo(
@@ -584,9 +581,7 @@ var
   semaphores: Semaphores
 
 proc init*(glfwExtensions: cstringArray, glfwExtensionCount: uint32, createSurface: CreateSurfaceProc) =
-  vkPreload();
   instance = createInstance(glfwExtensions, glfwExtensionCount)
-  doAssert vkInit(instance)
 
   surface = createSurface(instance)
   physicalDevice = pickPhysicalDevice(instance, surface)
