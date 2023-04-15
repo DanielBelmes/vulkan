@@ -142,7 +142,7 @@ proc genDefines(define: XmlNode, output: var string) =
   elif name == "VK_API_VERSION_1_3":
     output.add("const VK_API_VERSION_1_3* = vkMakeApiVersion(0, 1, 3, 0)\n")
   elif name == "VKSC_API_VERSION_1_0":
-    output.add("const VK_API_VERSION_1_0* = vkMakeApiVersion(VKSC_API_VARIANT, 1, 0, 0)\n")
+    output.add("const VKSC_API_VERSION_1_0* = vkMakeApiVersion(VKSC_API_VARIANT, 1, 0, 0)\n")
   else:
     echo "category:define not found {name}".fmt
 
