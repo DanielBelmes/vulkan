@@ -102,6 +102,7 @@ const VK_API_VERSION_1_3* = vkMakeApiVersion(0, 1, 3, 0)
 const VKSC_API_VERSION_1_0* = vkMakeApiVersion(VKSC_API_VARIANT, 1, 0, 0)
 const VK_HEADER_VERSION* = 152
 const VK_HEADER_VERSION_COMPLETE* = vkMakeVersion(1, 2, VK_HEADER_VERSION)
+const VK_NULL_HANDLE* = 0
 type VkSampleMask* = distinct uint32
 type VkBool32* = distinct uint32
 type VkFlags* = distinct uint32

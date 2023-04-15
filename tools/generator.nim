@@ -120,7 +120,7 @@ proc genDefines(define: XmlNode, output: var string) =
     output.add("const VK_HEADER_VERSION* = 152\n")
   elif name == "VK_HEADER_VERSION_COMPLETE":
     output.add("const VK_HEADER_VERSION_COMPLETE* = vkMakeVersion(1, 2, VK_HEADER_VERSION)\n")
-  elif name == "VK_NULL_HANDLE":
+  elif define.attr("name") == "VK_NULL_HANDLE":
     output.add("const VK_NULL_HANDLE* = 0\n")
   elif name == "VK_MAKE_API_VERSION":
     output.add("\ntemplate vkMakeApiVersion*(variant, major, minor, patch: untyped): untyped =\n")
