@@ -528,15 +528,15 @@ type VkToolPurposeFlagBitsEXT* = VkToolPurposeFlagBits
 type VkFragmentShadingRateNV* = cint
 type VkFragmentShadingRateTypeNV* = cint
 type VkSubpassMergeStatusEXT* = cint
-type VkAccessFlagBits2* = cint
+type VkAccessFlagBits2* = clonglong
 type VkAccessFlagBits2KHR* = VkAccessFlagBits2
-type VkPipelineStageFlagBits2* = cint
+type VkPipelineStageFlagBits2* = clonglong
 type VkPipelineStageFlagBits2KHR* = VkPipelineStageFlagBits2
 type VkProvokingVertexModeEXT* = cint
 type VkPipelineCacheValidationVersion* = cint
 type VkImageFormatConstraintsFlagBitsFUCHSIA* = cint
 type VkImageConstraintsInfoFlagBitsFUCHSIA* = cint
-type VkFormatFeatureFlagBits2* = cint
+type VkFormatFeatureFlagBits2* = clonglong
 type VkFormatFeatureFlagBits2KHR* = VkFormatFeatureFlagBits2
 type VkRenderingFlagBits* = cint
 type VkRenderingFlagBitsKHR* = VkRenderingFlagBits
@@ -1906,14 +1906,14 @@ proc newVkPipelineCacheCreateInfo*(sType: VkStructureType = VK_STRUCTURE_TYPE_PI
   result.initialDataSize = initialDataSize
   result.pInitialData = pInitialData
 
-type VkPipelineCacheHeaderVersionOne* = object
+type VkPipelineCacheHeaderVersionOne_s* = object
   headerSize*: uint32
   headerVersion*: VkPipelineCacheHeaderVersion
   vendorID*: uint32
   deviceID*: uint32
   pipelineCacheUUID*: array[VK_UUID_SIZE, uint8]
 
-proc newVkPipelineCacheHeaderVersionOne*(headerSize: uint32, headerVersion: VkPipelineCacheHeaderVersion, vendorID: uint32, deviceID: uint32, pipelineCacheUUID: array[VK_UUID_SIZE, uint8]): VkPipelineCacheHeaderVersionOne =
+proc newVkPipelineCacheHeaderVersionOne_s*(headerSize: uint32, headerVersion: VkPipelineCacheHeaderVersion, vendorID: uint32, deviceID: uint32, pipelineCacheUUID: array[VK_UUID_SIZE, uint8]): VkPipelineCacheHeaderVersionOne_s =
   result.headerSize = headerSize
   result.headerVersion = headerVersion
   result.vendorID = vendorID
@@ -1946,15 +1946,15 @@ proc newVkPipelineCacheSafetyCriticalIndexEntry*(pipelineIdentifier: array[VK_UU
   result.stageIndexStride = stageIndexStride
   result.stageIndexOffset = stageIndexOffset
 
-type VkPipelineCacheHeaderVersionSafetyCriticalOne* = object
-  headerVersionOne*: VkPipelineCacheHeaderVersionOne
+type VkPipelineCacheHeaderVersionSafetyCriticalOne_s* = object
+  headerVersionOne*: VkPipelineCacheHeaderVersionOne_s
   validationVersion*: VkPipelineCacheValidationVersion
   implementationData*: uint32
   pipelineIndexCount*: uint32
   pipelineIndexStride*: uint32
   pipelineIndexOffset*: uint64
 
-proc newVkPipelineCacheHeaderVersionSafetyCriticalOne*(headerVersionOne: VkPipelineCacheHeaderVersionOne, validationVersion: VkPipelineCacheValidationVersion, implementationData: uint32, pipelineIndexCount: uint32, pipelineIndexStride: uint32, pipelineIndexOffset: uint64): VkPipelineCacheHeaderVersionSafetyCriticalOne =
+proc newVkPipelineCacheHeaderVersionSafetyCriticalOne_s*(headerVersionOne: VkPipelineCacheHeaderVersionOne_s, validationVersion: VkPipelineCacheValidationVersion, implementationData: uint32, pipelineIndexCount: uint32, pipelineIndexStride: uint32, pipelineIndexOffset: uint64): VkPipelineCacheHeaderVersionSafetyCriticalOne_s =
   result.headerVersionOne = headerVersionOne
   result.validationVersion = validationVersion
   result.implementationData = implementationData
@@ -2984,10 +2984,10 @@ type VkScreenSurfaceCreateInfoQNX* = object
   sType*: VkStructureType
   pNext*: pointer
   flags*: VkScreenSurfaceCreateFlagsQNX
-  context*: ptr _screen_context
-  window*: ptr _screen_window
+  context*: ptr screen_context
+  window*: ptr screen_window
 
-proc newVkScreenSurfaceCreateInfoQNX*(sType: VkStructureType = VK_STRUCTURE_TYPE_SCREEN_SURFACE_CREATE_INFO_QNX, pNext: pointer = nil, flags: VkScreenSurfaceCreateFlagsQNX = 0.VkScreenSurfaceCreateFlagsQNX, context: ptr _screen_context, window: ptr _screen_window): VkScreenSurfaceCreateInfoQNX =
+proc newVkScreenSurfaceCreateInfoQNX*(sType: VkStructureType = VK_STRUCTURE_TYPE_SCREEN_SURFACE_CREATE_INFO_QNX, pNext: pointer = nil, flags: VkScreenSurfaceCreateFlagsQNX = 0.VkScreenSurfaceCreateFlagsQNX, context: ptr screen_context, window: ptr screen_window): VkScreenSurfaceCreateInfoQNX =
   result.sType = sType
   result.pNext = pNext
   result.flags = flags
@@ -3022,7 +3022,7 @@ type VkSwapchainCreateInfoKHR* = object
   clipped*: VkBool32
   oldSwapchain*: VkSwapchainKHR
 
-proc newVkSwapchainCreateInfoKHR*(sType: VkStructureType = VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR, pNext: pointer = nil, flags: VkSwapchainCreateFlagsKHR = 0.VkSwapchainCreateFlagsKHR, surface: VkSurfaceKHR, minImageCount: uint32, imageFormat: VkFormat, imageColorSpace: VkColorSpaceKHR, imageExtent: VkExtent2D, imageArrayLayers: uint32, imageUsage: VkImageUsageFlags, imageSharingMode: VkSharingMode, queueFamilyIndexCount: uint32, pQueueFamilyIndices: ptr uint32, preTransform: VkSurfaceTransformFlagBitsKHR, compositeAlpha: VkCompositeAlphaFlagBitsKHR, presentMode: VkPresentModeKHR, clipped: VkBool32, oldSwapchain: VkSwapchainKHR): VkSwapchainCreateInfoKHR =
+proc newVkSwapchainCreateInfoKHR*(sType: VkStructureType, pNext: pointer = nil, flags: VkSwapchainCreateFlagsKHR = 0.VkSwapchainCreateFlagsKHR, surface: VkSurfaceKHR, minImageCount: uint32, imageFormat: VkFormat, imageColorSpace: VkColorSpaceKHR, imageExtent: VkExtent2D, imageArrayLayers: uint32, imageUsage: VkImageUsageFlags, imageSharingMode: VkSharingMode, queueFamilyIndexCount: uint32, pQueueFamilyIndices: ptr uint32, preTransform: VkSurfaceTransformFlagBitsKHR, compositeAlpha: VkCompositeAlphaFlagBitsKHR, presentMode: VkPresentModeKHR, clipped: VkBool32, oldSwapchain: VkSwapchainKHR): VkSwapchainCreateInfoKHR =
   result.sType = sType
   result.pNext = pNext
   result.flags = flags
@@ -4342,12 +4342,12 @@ proc newVkFenceGetFdInfoKHR*(sType: VkStructureType = VK_STRUCTURE_TYPE_FENCE_GE
   result.fence = fence
   result.handleType = handleType
 
-type VkExportFenceSciSyncInfoNV* = object
+type VkExportFenceSciSyncInfoNV_s* = object
   sType*: VkStructureType
   pNext*: pointer
   pAttributes*: NvSciSyncAttrList
 
-proc newVkExportFenceSciSyncInfoNV*(sType: VkStructureType = VK_STRUCTURE_TYPE_EXPORT_FENCE_SCI_SYNC_INFO_NV, pNext: pointer = nil, pAttributes: NvSciSyncAttrList): VkExportFenceSciSyncInfoNV =
+proc newVkExportFenceSciSyncInfoNV_s*(sType: VkStructureType = VK_STRUCTURE_TYPE_EXPORT_FENCE_SCI_SYNC_INFO_NV, pNext: pointer = nil, pAttributes: NvSciSyncAttrList): VkExportFenceSciSyncInfoNV_s =
   result.sType = sType
   result.pNext = pNext
   result.pAttributes = pAttributes
@@ -13460,12 +13460,12 @@ type VkCommandBufferInheritanceRenderingInfo* = object
   flags*: VkRenderingFlags
   viewMask*: uint32
   colorAttachmentCount*: uint32
-  pColorAttachmentFormats*: ptr VkFormat
-  depthAttachmentFormat*: VkFormat
-  stencilAttachmentFormat*: VkFormat
-  rasterizationSamples*: VkSampleCountFlagBits
+  pColorAttachmentFormats: ptr VkFormat
+  depthAttachmentFormat: VkFormat
+  stencilAttachmentFormat: VkFormat
+  rasterizationSamples: VkSampleCountFlagBits
 
-proc newVkCommandBufferInheritanceRenderingInfo*(sType: VkStructureType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_INHERITANCE_RENDERING_INFO, pNext: pointer = nil, flags: VkRenderingFlags = 0.VkRenderingFlags, viewMask: uint32, colorAttachmentCount: uint32, pColorAttachmentFormats: ptr VkFormat, depthAttachmentFormat: VkFormat, stencilAttachmentFormat: VkFormat, rasterizationSamples: VkSampleCountFlagBits): VkCommandBufferInheritanceRenderingInfo =
+proc newVkCommandBufferInheritanceRenderingInfo(sType: VkStructureType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_INHERITANCE_RENDERING_INFO, pNext: pointer = nil, flags: VkRenderingFlags, viewMask: uint32, colorAttachmentCount: uint32,pColorAttachmentFormats: ptr VkFormat,depthAttachmentFormat: VkFormat,stencilAttachmentFormat: VkFormat,rasterizationSamples: VkSampleCountFlagBits): VkCommandBufferInheritanceRenderingInfo =
   result.sType = sType
   result.pNext = pNext
   result.flags = flags
@@ -14562,7 +14562,7 @@ proc newVkDeviceFaultInfoEXT*(sType: VkStructureType = VK_STRUCTURE_TYPE_DEVICE_
   result.pVendorInfos = pVendorInfos
   result.pVendorBinaryData = pVendorBinaryData
 
-type VkDeviceFaultVendorBinaryHeaderVersionOneEXT* = object
+type VkDeviceFaultVendorBinaryHeaderVersionOneEXT_s* = object
   headerSize*: uint32
   headerVersion*: VkDeviceFaultVendorBinaryHeaderVersionEXT
   vendorID*: uint32
@@ -14573,7 +14573,7 @@ type VkDeviceFaultVendorBinaryHeaderVersionOneEXT* = object
   applicationVersion*: uint32
   engineNameOffset*: uint32
 
-proc newVkDeviceFaultVendorBinaryHeaderVersionOneEXT*(headerSize: uint32, headerVersion: VkDeviceFaultVendorBinaryHeaderVersionEXT, vendorID: uint32, deviceID: uint32, driverVersion: uint32, pipelineCacheUUID: array[VK_UUID_SIZE, uint8], applicationNameOffset: uint32, applicationVersion: uint32, engineNameOffset: uint32): VkDeviceFaultVendorBinaryHeaderVersionOneEXT =
+proc newVkDeviceFaultVendorBinaryHeaderVersionOneEXT_s*(headerSize: uint32, headerVersion: VkDeviceFaultVendorBinaryHeaderVersionEXT, vendorID: uint32, deviceID: uint32, driverVersion: uint32, pipelineCacheUUID: array[VK_UUID_SIZE, uint8], applicationNameOffset: uint32, applicationVersion: uint32, engineNameOffset: uint32): VkDeviceFaultVendorBinaryHeaderVersionOneEXT_s =
   result.headerSize = headerSize
   result.headerVersion = headerVersion
   result.vendorID = vendorID
@@ -16874,7 +16874,7 @@ proc vkGetPhysicalDeviceSurfaceSupportKHR*(physicalDevice: VkPhysicalDevice, que
 proc vkGetPhysicalDeviceSurfaceCapabilitiesKHR*(physicalDevice: VkPhysicalDevice, surface: VkSurfaceKHR, pSurfaceCapabilities: ptr VkSurfaceCapabilitiesKHR ): VkResult {.cdecl, importc, dynlib: vkDLL.}
 proc vkGetPhysicalDeviceSurfaceFormatsKHR*(physicalDevice: VkPhysicalDevice, surface: VkSurfaceKHR, pSurfaceFormatCount: ptr uint32 , pSurfaceFormats: ptr VkSurfaceFormatKHR ): VkResult {.cdecl, importc, dynlib: vkDLL.}
 proc vkGetPhysicalDeviceSurfacePresentModesKHR*(physicalDevice: VkPhysicalDevice, surface: VkSurfaceKHR, pPresentModeCount: ptr uint32 , pPresentModes: ptr VkPresentModeKHR ): VkResult {.cdecl, importc, dynlib: vkDLL.}
-proc vkCreateSwapchainKHR*(device: VkDevice, pCreateInfo: ptr VkSwapchainCreateInfoKHR , pAllocator: ptr VkAllocationCallbacks , pSwapchain: ptr VkSwapchainKHR ): VkResult {.cdecl, importc, dynlib: vkDLL.}
+proc vkCreateSwapchainKHR*(device: VkDevice, pCreateInfo: ptr VkSwapchainCreateInfoKHR, pAllocator: ptr VkAllocationCallbacks , pSwapchain: ptr VkSwapchainKHR ): VkResult {.cdecl, importc, dynlib: vkDLL.}
 proc vkDestroySwapchainKHR*(device: VkDevice, swapchain: VkSwapchainKHR, pAllocator: ptr VkAllocationCallbacks ): void {.cdecl, importc, dynlib: vkDLL.}
 proc vkGetSwapchainImagesKHR*(device: VkDevice, swapchain: VkSwapchainKHR, pSwapchainImageCount: ptr uint32 , pSwapchainImages: ptr VkImage ): VkResult {.cdecl, importc, dynlib: vkDLL.}
 proc vkAcquireNextImageKHR*(device: VkDevice, swapchain: VkSwapchainKHR, timeout: uint64, semaphore: VkSemaphore, fence: VkFence, pImageIndex: ptr uint32 ): VkResult {.cdecl, importc, dynlib: vkDLL.}
@@ -16893,7 +16893,7 @@ proc vkGetPhysicalDeviceDirectFBPresentationSupportEXT*(physicalDevice: VkPhysic
 proc vkCreateImagePipeSurfaceFUCHSIA*(instance: VkInstance, pCreateInfo: ptr VkImagePipeSurfaceCreateInfoFUCHSIA , pAllocator: ptr VkAllocationCallbacks , pSurface: ptr VkSurfaceKHR ): VkResult {.cdecl, importc, dynlib: vkDLL.}
 proc vkCreateStreamDescriptorSurfaceGGP*(instance: VkInstance, pCreateInfo: ptr VkStreamDescriptorSurfaceCreateInfoGGP , pAllocator: ptr VkAllocationCallbacks , pSurface: ptr VkSurfaceKHR ): VkResult {.cdecl, importc, dynlib: vkDLL.}
 proc vkCreateScreenSurfaceQNX*(instance: VkInstance, pCreateInfo: ptr VkScreenSurfaceCreateInfoQNX , pAllocator: ptr VkAllocationCallbacks , pSurface: ptr VkSurfaceKHR ): VkResult {.cdecl, importc, dynlib: vkDLL.}
-proc vkGetPhysicalDeviceScreenPresentationSupportQNX*(physicalDevice: VkPhysicalDevice, queueFamilyIndex: uint32, window: ptr _screen_window ): VkBool32 {.cdecl, importc, dynlib: vkDLL.}
+proc vkGetPhysicalDeviceScreenPresentationSupportQNX*(physicalDevice: VkPhysicalDevice, queueFamilyIndex: uint32, window: ptr screen_window ): VkBool32 {.cdecl, importc, dynlib: vkDLL.}
 proc vkCreateDebugReportCallbackEXT*(instance: VkInstance, pCreateInfo: ptr VkDebugReportCallbackCreateInfoEXT , pAllocator: ptr VkAllocationCallbacks , pCallback: ptr VkDebugReportCallbackEXT ): VkResult {.cdecl, importc, dynlib: vkDLL.}
 proc vkDestroyDebugReportCallbackEXT*(instance: VkInstance, callback: VkDebugReportCallbackEXT, pAllocator: ptr VkAllocationCallbacks ): void {.cdecl, importc, dynlib: vkDLL.}
 proc vkDebugReportMessageEXT*(instance: VkInstance, flags: VkDebugReportFlagsEXT, objectType: VkDebugReportObjectTypeEXT, `object`: uint64, location: uint, messageCode: int32, pLayerPrefix: cstring , pMessage: cstring ): void {.cdecl, importc, dynlib: vkDLL.}
@@ -17719,9 +17719,6 @@ const VK_EXT_DEPTH_RANGE_UNRESTRICTED_EXTENSION_NAME* = "VK_EXT_depth_range_unre
 # Extension: VK_KHR_sampler_mirror_clamp_to_edge
 const VK_KHR_SAMPLER_MIRROR_CLAMP_TO_EDGE_SPEC_VERSION* = 3
 const VK_KHR_SAMPLER_MIRROR_CLAMP_TO_EDGE_EXTENSION_NAME* = "VK_KHR_sampler_mirror_clamp_to_edge"
-const VK_SAMPLER_ADDRESS_MODE_MIRROR_CLAMP_TO_EDGE*: VkSamplerAddressMode = VkSamplerAddressMode(4)
-template VK_SAMPLER_ADDRESS_MODE_MIRROR_CLAMP_TO_EDGE_KHR* =
-  VK_SAMPLER_ADDRESS_MODE_MIRROR_CLAMP_TO_EDGE
 
 # Extension: VK_IMG_filter_cubic
 const VK_IMG_FILTER_CUBIC_SPEC_VERSION* = 1
@@ -18109,13 +18106,6 @@ template VK_STRUCTURE_TYPE_BIND_IMAGE_MEMORY_DEVICE_GROUP_INFO_KHR* =
   VK_STRUCTURE_TYPE_BIND_IMAGE_MEMORY_DEVICE_GROUP_INFO
 template VK_IMAGE_CREATE_SPLIT_INSTANCE_BIND_REGIONS_BIT_KHR* =
   VK_IMAGE_CREATE_SPLIT_INSTANCE_BIND_REGIONS_BIT
-const VK_STRUCTURE_TYPE_DEVICE_GROUP_PRESENT_CAPABILITIES_KHR*: VkStructureType = VkStructureType(1000060007)
-const VK_STRUCTURE_TYPE_IMAGE_SWAPCHAIN_CREATE_INFO_KHR*: VkStructureType = VkStructureType(1000060008)
-const VK_STRUCTURE_TYPE_BIND_IMAGE_MEMORY_SWAPCHAIN_INFO_KHR*: VkStructureType = VkStructureType(1000060009)
-const VK_STRUCTURE_TYPE_ACQUIRE_NEXT_IMAGE_INFO_KHR*: VkStructureType = VkStructureType(1000060010)
-const VK_STRUCTURE_TYPE_DEVICE_GROUP_PRESENT_INFO_KHR*: VkStructureType = VkStructureType(1000060011)
-const VK_STRUCTURE_TYPE_DEVICE_GROUP_SWAPCHAIN_CREATE_INFO_KHR*: VkStructureType = VkStructureType(1000060012)
-const VK_SWAPCHAIN_CREATE_SPLIT_INSTANCE_BIND_REGIONS_BIT_KHR*: VkSwapchainCreateFlagBitsKHR = VkSwapchainCreateFlagBitsKHR(1)
 
 # Extension: VK_EXT_validation_flags
 const VK_EXT_VALIDATION_FLAGS_SPEC_VERSION* = 2
@@ -18189,10 +18179,6 @@ const VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_PIPELINE_ROBUSTNESS_PROPERTIES_EXT*: VkS
 # Extension: VK_KHR_maintenance1
 const VK_KHR_MAINTENANCE_1_SPEC_VERSION* = 2
 const VK_KHR_MAINTENANCE_1_EXTENSION_NAME* = "VK_KHR_maintenance1"
-template VK_KHR_MAINTENANCE1_SPEC_VERSION* =
-  VK_KHR_MAINTENANCE_1_SPEC_VERSION
-template VK_KHR_MAINTENANCE1_EXTENSION_NAME* =
-  VK_KHR_MAINTENANCE_1_EXTENSION_NAME
 template VK_ERROR_OUT_OF_POOL_MEMORY_KHR* =
   VK_ERROR_OUT_OF_POOL_MEMORY
 template VK_FORMAT_FEATURE_TRANSFER_SRC_BIT_KHR* =
@@ -18330,7 +18316,6 @@ const VK_KHR_PUSH_DESCRIPTOR_EXTENSION_NAME* = "VK_KHR_push_descriptor"
 const VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_PUSH_DESCRIPTOR_PROPERTIES_KHR*: VkStructureType = VkStructureType(1000080000)
 const VK_DESCRIPTOR_SET_LAYOUT_CREATE_PUSH_DESCRIPTOR_BIT_KHR*: VkDescriptorSetLayoutCreateFlagBits = VkDescriptorSetLayoutCreateFlagBits(1)
 const VK_DESCRIPTOR_UPDATE_TEMPLATE_TYPE_PUSH_DESCRIPTORS_KHR*: VkDescriptorUpdateTemplateType = VkDescriptorUpdateTemplateType(1)
-const VK_DESCRIPTOR_UPDATE_TEMPLATE_TYPE_PUSH_DESCRIPTORS_KHR*: VkDescriptorUpdateTemplateType = VkDescriptorUpdateTemplateType(1)
 
 # Extension: VK_EXT_conditional_rendering
 const VK_EXT_CONDITIONAL_RENDERING_SPEC_VERSION* = 2
@@ -18370,7 +18355,6 @@ template VK_OBJECT_TYPE_DESCRIPTOR_UPDATE_TEMPLATE_KHR* =
   VK_OBJECT_TYPE_DESCRIPTOR_UPDATE_TEMPLATE
 template VK_DESCRIPTOR_UPDATE_TEMPLATE_TYPE_DESCRIPTOR_SET_KHR* =
   VK_DESCRIPTOR_UPDATE_TEMPLATE_TYPE_DESCRIPTOR_SET
-const VK_DESCRIPTOR_UPDATE_TEMPLATE_TYPE_PUSH_DESCRIPTORS_KHR*: VkDescriptorUpdateTemplateType = VkDescriptorUpdateTemplateType(1)
 template VK_DEBUG_REPORT_OBJECT_TYPE_DESCRIPTOR_UPDATE_TEMPLATE_KHR_EXT* =
   VK_DEBUG_REPORT_OBJECT_TYPE_DESCRIPTOR_UPDATE_TEMPLATE_EXT
 
@@ -18396,8 +18380,6 @@ const VK_EXT_ACQUIRE_XLIB_DISPLAY_EXTENSION_NAME* = "VK_EXT_acquire_xlib_display
 const VK_EXT_DISPLAY_SURFACE_COUNTER_SPEC_VERSION* = 1
 const VK_EXT_DISPLAY_SURFACE_COUNTER_EXTENSION_NAME* = "VK_EXT_display_surface_counter"
 const VK_STRUCTURE_TYPE_SURFACE_CAPABILITIES_2_EXT*: VkStructureType = VkStructureType(1000090000)
-template VK_STRUCTURE_TYPE_SURFACE_CAPABILITIES2_EXT* =
-  VK_STRUCTURE_TYPE_SURFACE_CAPABILITIES_2_EXT
 
 # Extension: VK_EXT_display_control
 const VK_EXT_DISPLAY_CONTROL_SPEC_VERSION* = 1
@@ -18427,10 +18409,6 @@ const VK_NV_GEOMETRY_SHADER_PASSTHROUGH_EXTENSION_NAME* = "VK_NV_geometry_shader
 # Extension: VK_NV_viewport_array2
 const VK_NV_VIEWPORT_ARRAY_2_SPEC_VERSION* = 1
 const VK_NV_VIEWPORT_ARRAY_2_EXTENSION_NAME* = "VK_NV_viewport_array2"
-template VK_NV_VIEWPORT_ARRAY2_SPEC_VERSION* =
-  VK_NV_VIEWPORT_ARRAY_2_SPEC_VERSION
-template VK_NV_VIEWPORT_ARRAY2_EXTENSION_NAME* =
-  VK_NV_VIEWPORT_ARRAY_2_EXTENSION_NAME
 
 # Extension: VK_NVX_multiview_per_view_attributes
 const VK_NVX_MULTIVIEW_PER_VIEW_ATTRIBUTES_SPEC_VERSION* = 1
@@ -18610,10 +18588,6 @@ const VK_STRUCTURE_TYPE_PERFORMANCE_QUERY_RESERVATION_INFO_KHR*: VkStructureType
 # Extension: VK_KHR_maintenance2
 const VK_KHR_MAINTENANCE_2_SPEC_VERSION* = 1
 const VK_KHR_MAINTENANCE_2_EXTENSION_NAME* = "VK_KHR_maintenance2"
-template VK_KHR_MAINTENANCE2_SPEC_VERSION* =
-  VK_KHR_MAINTENANCE_2_SPEC_VERSION
-template VK_KHR_MAINTENANCE2_EXTENSION_NAME* =
-  VK_KHR_MAINTENANCE_2_EXTENSION_NAME
 template VK_IMAGE_CREATE_BLOCK_TEXEL_VIEW_COMPATIBLE_BIT_KHR* =
   VK_IMAGE_CREATE_BLOCK_TEXEL_VIEW_COMPATIBLE_BIT
 template VK_IMAGE_CREATE_EXTENDED_USAGE_BIT_KHR* =
@@ -19107,7 +19081,6 @@ template VK_CHROMA_LOCATION_COSITED_EVEN_KHR* =
   VK_CHROMA_LOCATION_COSITED_EVEN
 template VK_CHROMA_LOCATION_MIDPOINT_KHR* =
   VK_CHROMA_LOCATION_MIDPOINT
-const VK_DEBUG_REPORT_OBJECT_TYPE_SAMPLER_YCBCR_CONVERSION_EXT*: VkDebugReportObjectTypeEXT = VkDebugReportObjectTypeEXT(1000156000)
 
 # Extension: VK_KHR_bind_memory2
 const VK_KHR_BIND_MEMORY_2_SPEC_VERSION* = 1
@@ -19301,10 +19274,6 @@ const VK_NV_EXTENSION_168_EXTENSION_NAME* = "VK_NV_extension_168"
 # Extension: VK_KHR_maintenance3
 const VK_KHR_MAINTENANCE_3_SPEC_VERSION* = 1
 const VK_KHR_MAINTENANCE_3_EXTENSION_NAME* = "VK_KHR_maintenance3"
-template VK_KHR_MAINTENANCE3_SPEC_VERSION* =
-  VK_KHR_MAINTENANCE_3_SPEC_VERSION
-template VK_KHR_MAINTENANCE3_EXTENSION_NAME* =
-  VK_KHR_MAINTENANCE_3_EXTENSION_NAME
 template VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_MAINTENANCE_3_PROPERTIES_KHR* =
   VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_MAINTENANCE_3_PROPERTIES
 template VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_SUPPORT_KHR* =
@@ -19702,10 +19671,6 @@ const VK_EXT_EXTENSION_223_EXTENSION_NAME* = "VK_EXT_extension_223"
 # Extension: VK_GOOGLE_hlsl_functionality1
 const VK_GOOGLE_HLSL_FUNCTIONALITY_1_SPEC_VERSION* = 1
 const VK_GOOGLE_HLSL_FUNCTIONALITY_1_EXTENSION_NAME* = "VK_GOOGLE_hlsl_functionality1"
-template VK_GOOGLE_HLSL_FUNCTIONALITY1_SPEC_VERSION* =
-  VK_GOOGLE_HLSL_FUNCTIONALITY_1_SPEC_VERSION
-template VK_GOOGLE_HLSL_FUNCTIONALITY1_EXTENSION_NAME* =
-  VK_GOOGLE_HLSL_FUNCTIONALITY_1_EXTENSION_NAME
 
 # Extension: VK_GOOGLE_decorate_string
 const VK_GOOGLE_DECORATE_STRING_SPEC_VERSION* = 1
@@ -19855,8 +19820,6 @@ const VK_EXT_TOOLING_INFO_SPEC_VERSION* = 1
 const VK_EXT_TOOLING_INFO_EXTENSION_NAME* = "VK_EXT_tooling_info"
 template VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_TOOL_PROPERTIES_EXT* =
   VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_TOOL_PROPERTIES
-const VK_TOOL_PURPOSE_DEBUG_REPORTING_BIT_EXT*: VkToolPurposeFlagBits = VkToolPurposeFlagBits(32)
-const VK_TOOL_PURPOSE_DEBUG_MARKERS_BIT_EXT*: VkToolPurposeFlagBits = VkToolPurposeFlagBits(64)
 const VK_TOOL_PURPOSE_DEBUG_REPORTING_BIT_EXT*: VkToolPurposeFlagBits = VkToolPurposeFlagBits(32)
 const VK_TOOL_PURPOSE_DEBUG_MARKERS_BIT_EXT*: VkToolPurposeFlagBits = VkToolPurposeFlagBits(64)
 
@@ -21454,7 +21417,6 @@ const VK_EXT_LEGACY_DITHERING_EXTENSION_NAME* = "VK_EXT_legacy_dithering"
 const VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_LEGACY_DITHERING_FEATURES_EXT*: VkStructureType = VkStructureType(1000465000)
 const VK_SUBPASS_DESCRIPTION_ENABLE_LEGACY_DITHERING_BIT_EXT*: VkSubpassDescriptionFlagBits = VkSubpassDescriptionFlagBits(128)
 const VK_RENDERING_ENABLE_LEGACY_DITHERING_BIT_EXT*: VkRenderingFlagBits = VkRenderingFlagBits(8)
-const VK_RENDERING_ENABLE_LEGACY_DITHERING_BIT_EXT*: VkRenderingFlagBits = VkRenderingFlagBits(8)
 
 # Extension: VK_EXT_pipeline_protected_access
 const VK_EXT_PIPELINE_PROTECTED_ACCESS_SPEC_VERSION* = 1
@@ -21529,8 +21491,6 @@ const VK_EXT_SHADER_OBJECT_EXTENSION_NAME* = "VK_EXT_shader_object"
 const VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SHADER_OBJECT_FEATURES_EXT*: VkStructureType = VkStructureType(1000482000)
 const VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SHADER_OBJECT_PROPERTIES_EXT*: VkStructureType = VkStructureType(1000482001)
 const VK_STRUCTURE_TYPE_SHADER_CREATE_INFO_EXT*: VkStructureType = VkStructureType(1000482002)
-const VK_STRUCTURE_TYPE_VERTEX_INPUT_BINDING_DESCRIPTION_2_EXT*: VkStructureType = VkStructureType(1000352001)
-const VK_STRUCTURE_TYPE_VERTEX_INPUT_ATTRIBUTE_DESCRIPTION_2_EXT*: VkStructureType = VkStructureType(1000352002)
 template VK_STRUCTURE_TYPE_SHADER_REQUIRED_SUBGROUP_SIZE_CREATE_INFO_EXT* =
   VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_REQUIRED_SUBGROUP_SIZE_CREATE_INFO
 const VK_OBJECT_TYPE_SHADER_EXT*: VkObjectType = VkObjectType(1000482000)
@@ -21572,12 +21532,6 @@ const VK_OBJECT_TYPE_SEMAPHORE_SCI_SYNC_POOL_NV*: VkObjectType = VkObjectType(10
 const VK_STRUCTURE_TYPE_SEMAPHORE_SCI_SYNC_POOL_CREATE_INFO_NV*: VkStructureType = VkStructureType(1000489000)
 const VK_STRUCTURE_TYPE_SEMAPHORE_SCI_SYNC_CREATE_INFO_NV*: VkStructureType = VkStructureType(1000489001)
 const VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_EXTERNAL_SCI_SYNC_2_FEATURES_NV*: VkStructureType = VkStructureType(1000489002)
-const VK_STRUCTURE_TYPE_IMPORT_FENCE_SCI_SYNC_INFO_NV*: VkStructureType = VkStructureType(1000373000)
-const VK_STRUCTURE_TYPE_EXPORT_FENCE_SCI_SYNC_INFO_NV*: VkStructureType = VkStructureType(1000373001)
-const VK_STRUCTURE_TYPE_FENCE_GET_SCI_SYNC_INFO_NV*: VkStructureType = VkStructureType(1000373002)
-const VK_STRUCTURE_TYPE_SCI_SYNC_ATTRIBUTES_INFO_NV*: VkStructureType = VkStructureType(1000373003)
-const VK_EXTERNAL_FENCE_HANDLE_TYPE_SCI_SYNC_OBJ_BIT_NV*: VkExternalFenceHandleTypeFlagBits = VkExternalFenceHandleTypeFlagBits(16)
-const VK_EXTERNAL_FENCE_HANDLE_TYPE_SCI_SYNC_FENCE_BIT_NV*: VkExternalFenceHandleTypeFlagBits = VkExternalFenceHandleTypeFlagBits(32)
 const VK_STRUCTURE_TYPE_DEVICE_SEMAPHORE_SCI_SYNC_POOL_RESERVATION_CREATE_INFO_NV*: VkStructureType = VkStructureType(1000489003)
 
 # Extension: VK_NV_ray_tracing_invocation_reorder
