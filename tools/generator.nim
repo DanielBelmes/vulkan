@@ -224,6 +224,8 @@ proc genConstructors(s: XmlNode, output: var string) =
   output.add("): {sname} =\n".fmt)
 
   for member in s.findAll("member"):
+    if member.attr("api") == "vulkansc":
+        continue
     var name = member.child("name").innerText
     if keywords.contains(name):
       name = "`{name}`".fmt
