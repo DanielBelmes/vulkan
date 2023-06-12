@@ -1,0 +1,1 @@
+type RuntimeException* = object of CatchableError

@@ -10,6 +10,7 @@ skipDirs    = @["tests"]
 # Dependencies
 
 requires "nim >= 1.0.0"
+requires "https://github.com/DanielBelmes/glfw#head"
 
 task gen, "Generate bindings from source":
   exec("nim c -d:ssl -r tools/generator.nim")
