@@ -1060,10 +1060,10 @@ type VkWriteDescriptorSet* = object
   descriptorCount*: uint32
   descriptorType*: VkDescriptorType
   pImageInfo*: ptr VkDescriptorImageInfo
-  pBufferInfo*: ptr ptr VkDescriptorBufferInfo
+  pBufferInfo*: ptr VkDescriptorBufferInfo
   pTexelBufferView*: ptr VkBufferView
 
-proc newVkWriteDescriptorSet*(sType: VkStructureType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET, pNext: pointer = nil, dstSet: VkDescriptorSet, dstBinding: uint32, dstArrayElement: uint32, descriptorCount: uint32, descriptorType: VkDescriptorType, pImageInfo: ptr VkDescriptorImageInfo, pBufferInfo: ptr ptr VkDescriptorBufferInfo, pTexelBufferView: ptr VkBufferView): VkWriteDescriptorSet =
+proc newVkWriteDescriptorSet*(sType: VkStructureType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET, pNext: pointer = nil, dstSet: VkDescriptorSet, dstBinding: uint32, dstArrayElement: uint32, descriptorCount: uint32, descriptorType: VkDescriptorType, pImageInfo: ptr VkDescriptorImageInfo, pBufferInfo: ptr VkDescriptorBufferInfo, pTexelBufferView: ptr VkBufferView): VkWriteDescriptorSet =
   result.sType = sType
   result.pNext = pNext
   result.dstSet = dstSet
