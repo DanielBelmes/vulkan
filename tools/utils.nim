@@ -9,7 +9,6 @@ const srcHeader* = """
 ## WARNING: This is a generated file. Do not edit
 ## Any edits will be overwritten by the generator.
 
-var currInst: pointer = nil
 
 when not defined(vkCustomLoader):
   import dynlib
@@ -40,33 +39,6 @@ type
   MTLTexture_id = ptr object
   MTLSharedEvent_id = ptr object
   IOSurfaceRef = ptr object
-"""
-
-const vkInit* = """
-var
-  vkCreateInstance*: proc(pCreateInfo: ptr VkInstanceCreateInfo , pAllocator: ptr VkAllocationCallbacks , pInstance: ptr VkInstance ): VkResult {.stdcall.}
-  vkEnumerateInstanceExtensionProperties*: proc(pLayerName: cstring , pPropertyCount: ptr uint32 , pProperties: ptr VkExtensionProperties ): VkResult {.stdcall.}
-  vkEnumerateInstanceLayerProperties*: proc(pPropertyCount: ptr uint32 , pProperties: ptr VkLayerProperties ): VkResult {.stdcall.}
-  vkEnumerateInstanceVersion*: proc(pApiVersion: ptr uint32 ): VkResult {.stdcall.}
-
-proc vkPreload*(load1_1: bool = true) =
-  vkGetInstanceProcAddr = cast[proc(instance: VkInstance, pName: cstring ): PFN_vkVoidFunction {.stdcall.}](symAddr(vkHandleDLL, "vkGetInstanceProcAddr"))
-
-  vkCreateInstance = cast[proc(pCreateInfo: ptr VkInstanceCreateInfo , pAllocator: ptr VkAllocationCallbacks , pInstance: ptr VkInstance ): VkResult {.stdcall.}](vkGetProc("vkCreateInstance"))
-  vkEnumerateInstanceExtensionProperties = cast[proc(pLayerName: cstring , pPropertyCount: ptr uint32 , pProperties: ptr VkExtensionProperties ): VkResult {.stdcall.}](vkGetProc("vkEnumerateInstanceExtensionProperties"))
-  vkEnumerateInstanceLayerProperties = cast[proc(pPropertyCount: ptr uint32 , pProperties: ptr VkLayerProperties ): VkResult {.stdcall.}](vkGetProc("vkEnumerateInstanceLayerProperties"))
-
-  if load1_1:
-    vkEnumerateInstanceVersion = cast[proc(pApiVersion: ptr uint32 ): VkResult {.stdcall.}](vkGetProc("vkEnumerateInstanceVersion"))
-
-proc vkInit*(instance: VkInstance, load1_0: bool = true, load1_1: bool = true): bool =
-  currInst = cast[pointer](instance)
-  if load1_0:
-    vkLoad1_0()
-  when not defined(macosx):
-    if load1_1:
-      vkLoad1_1()
-  return true
 """
 
 let keywords* = ["addr", "and", "as", "asm", "bind", "block", "break", "case", "cast", "concept",

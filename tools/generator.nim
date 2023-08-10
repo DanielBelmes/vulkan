@@ -321,11 +321,11 @@ proc genFuncPointer(funcpointer: XmlNode, output: var string) =
   elif name == "PFN_vkDebugReportCallbackEXT":
     output.add("type PFN_vkDebugReportCallbackEXT* = proc(flags: VkDebugReportFlagsEXT; objectType: VkDebugReportObjectTypeEXT; cbObject: uint64; location: csize_t; messageCode:  int32; pLayerPrefix: cstring; pMessage: cstring; pUserData: pointer): VkBool32 {.cdecl.}\n")
   elif name == "PFN_vkDebugUtilsMessengerCallbackEXT":
-    output.add("type PFN_vkDebugUtilsMessengerCallbackEXT* = proc(messageSeverity: VkDebugUtilsMessageSeverityFlagBitsEXT, messageTypes: VkDebugUtilsMessageTypeFlagsEXT, pCallbackData: VkDebugUtilsMessengerCallbackDataEXT, userData: pointer): VkBool32 {.cdecl.}\n"):
+    output.add("type PFN_vkDebugUtilsMessengerCallbackEXT* = proc(messageSeverity: VkDebugUtilsMessageSeverityFlagBitsEXT, messageTypes: VkDebugUtilsMessageTypeFlagsEXT, pCallbackData: VkDebugUtilsMessengerCallbackDataEXT, userData: pointer): VkBool32 {.cdecl.}\n")
   elif name == "PFN_vkFaultCallbackFunction":
-    output.add("type PFN_vkFaultCallbackFunction* = proc(unrecordedFaults: VkBool32, faultCount: uint32, pFaults: pointer) {.cdecl.}\n"):
+    output.add("type PFN_vkFaultCallbackFunction* = proc(unrecordedFaults: VkBool32, faultCount: uint32, pFaults: pointer) {.cdecl.}\n")
   elif name == "PFN_vkDeviceMemoryReportCallbackEXT":
-    output.add("type PFN_vkDeviceMemoryReportCallbackEXT* = proc(pCallbackData: VkDeviceMemoryReportCallbackDataEXT, pUserData: pointer) {.cdecl.}\n"):
+    output.add("type PFN_vkDeviceMemoryReportCallbackEXT* = proc(pCallbackData: VkDeviceMemoryReportCallbackDataEXT, pUserData: pointer) {.cdecl.}\n")
   elif name == "PFN_vkGetInstanceProcAddrLUNARG":
     output.add("type PFN_vkGetInstanceProcAddrLUNARG* = proc(instance: VkInstance, pName: cstring) {.cdecl.}\n")
   else:
