@@ -42,6 +42,7 @@ proc translateType(s: string): string =
       result = "ptr " & result
 
   result = result.replace("ptr void", "pointer")
+  result = result.replace("ptr ptr void", "ptr pointer")
   result = result.replace("ptr ptr char", "cstringArray")
   result = result.replace("ptr char", "cstring")
 
@@ -95,9 +96,15 @@ proc genConsts(constNode: XmlNode, output: var string) =
   output.add("const {constName}*{constType} = {constValue}\n".fmt)
 
 proc genDefines(define: XmlNode, output: var string) =
-  if define.child("name") == nil or define.child("name").innerText == "VK_API_VERSION" or define.attr("api") == "vulkansc" or define.child("name").innerText == "VK_DEFINE_HANDLE": #VK_API_VERSION deprecated and VK_DEFINE_HANDLE not needed
+  var name: string
+  if define.child("name") == nil:
+    name = define.attr("name")
+    if name == "VK_API_VERSION" or name == "VK_DEFINE_HANDLE": #VK_API_VERSION deprecated and VK_DEFINE_HANDLE not needed
+      return
+  else:
+    name = define.child("name").innerText
+  if define.attr("api") == "vulkansc":
     return
-  let name = define.child("name").innerText
   if  name == "VK_MAKE_VERSION":
     output.add("\ntemplate vkMakeVersion*(major, minor, patch: untyped): untyped =\n")
     output.add("  (((major) shl 22) or ((minor) shl 12) or (patch))\n")
@@ -120,7 +127,7 @@ proc genDefines(define: XmlNode, output: var string) =
     output.add("const VK_HEADER_VERSION* = 152\n")
   elif name == "VK_HEADER_VERSION_COMPLETE":
     output.add("const VK_HEADER_VERSION_COMPLETE* = vkMakeVersion(1, 2, VK_HEADER_VERSION)\n")
-  elif define.attr("name") == "VK_NULL_HANDLE":
+  elif name == "VK_NULL_HANDLE":
     output.add("const VK_NULL_HANDLE* = 0\n")
   elif name == "VK_MAKE_API_VERSION":
     output.add("\ntemplate vkMakeApiVersion*(variant, major, minor, patch: untyped): untyped =\n")
@@ -204,8 +211,12 @@ proc genConstructors(s: XmlNode, output: var string) =
     if keywords.contains(name):
       name = "`{name}`".fmt
     var argType = member.child("type").innerText
+    let ptrcheck: int = member.innerText.count("*")
+    echo ptrcheck
+    if ptrcheck > 0:
+      for i in 0..<ptrcheck:
+        argType = "*" & argType
     argType = argType.translateType()
-    var optional = member.attr("optional")
     if not output.endsWith('('):
       output.add(", ")
 
@@ -213,21 +224,8 @@ proc genConstructors(s: XmlNode, output: var string) =
     var arraySize = "0"
     if member.innerText.contains('['):
       arraySize = member.innerText[member.innerText.find('[') + 1 ..< member.innerText.find(']')]
-      if arraySize != "":
+      if arraySize != "" and arraySize != "_DYNAMIC":
         isArray = true
-      if arraySize == "_DYNAMIC":
-        argType = "ptr " & argType
-        isArray = false
-
-    var depth = member.innerText.count('*')
-    if argType == "pointer":
-      depth.dec
-    for i in 0 ..< depth:
-      argType = "ptr " & argType
-
-    argType = argType.replace("ptr void", "pointer")
-    argType = argType.replace("ptr ptr char", "cstringArray")
-    argType = argType.replace("ptr char", "cstring")
 
     if not isArray:
       output.add("{name}: {argType}".fmt)
@@ -268,27 +266,18 @@ proc genStructsOrUnion(node: XmlNode, output: var string) =
     if keywords.contains(memberName):
       memberName = "`{memberName}`".fmt
     var memberType = member.child("type").innerText
+    let ptrcheck = member.innerText.count("*")
+    if ptrcheck > 0:
+      for i in 0..<ptrcheck:
+        memberType = "*" & memberType
     memberType = memberType.translateType()
 
     var isArray = false
     var arraySize = "0"
     if member.innerText.contains('['):
       arraySize = member.innerText[member.innerText.find('[') + 1 ..< member.innerText.find(']')]
-      if arraySize != "":
+      if arraySize != "" and arraySize != "_DYNAMIC":
         isArray = true
-      if arraySize == "_DYNAMIC":
-        memberType = "ptr " & memberType
-        isArray = false
-
-    var depth = member.innerText.count('*')
-    if memberType == "pointer":
-      depth.dec
-    for i in 0 ..< depth:
-      memberType = "ptr " & memberType
-
-    memberType = memberType.replace("ptr void", "pointer")
-    memberType = memberType.replace("ptr ptr char", "cstringArray")
-    memberType = memberType.replace("ptr char", "cstring")
 
     var vkArg: VkArg
     vkArg.name = memberName
