@@ -438,7 +438,10 @@ proc parseRegistery(node: XmlNode, registery: TableRef[string, seq[XmlNode]], ou
             of "basetype":
               node.genBaseTypes(output)
             of "struct":
-              node.genStructsOrUnion(output)
+              if node.attr("alias") != "":
+                node.genAliases(output)
+              else:
+                node.genStructsOrUnion(output)
             of "define":
               node.genDefines(output)
             of "bitmask":
