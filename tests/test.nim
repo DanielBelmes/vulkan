@@ -1,10 +1,13 @@
 import application
+import unittest
 
-if isMainModule:
-  var app: VulkanTriangleApp = new VulkanTriangleApp
+test "can launch app":
+  if isMainModule:
+    var app: VulkanTriangleApp = new VulkanTriangleApp
 
-  try:
-    app.run()
-  except CatchableError:
-    echo getCurrentExceptionMsg()
-    quit(-1)
+    try:
+      app.run()
+      check true
+    except CatchableError:
+      echo getCurrentExceptionMsg()
+      quit(-1)

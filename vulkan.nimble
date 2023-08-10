@@ -17,4 +17,4 @@ task gen, "Generate bindings from source":
 
 task test, "Create basic triangle with Vulkan and GLFW":
   requires "nimgl@#1.0" # Please https://github.com/nim-lang/nimble/issues/482
-  exec("nim c -r tests/test.nim")
+  exec("nim c -r -d:release tests/test.nim")

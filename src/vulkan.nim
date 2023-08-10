@@ -13466,7 +13466,7 @@ type VkCommandBufferInheritanceRenderingInfo* = object
   stencilAttachmentFormat: VkFormat
   rasterizationSamples: VkSampleCountFlagBits
 
-proc newVkCommandBufferInheritanceRenderingInfo(sType: VkStructureType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_INHERITANCE_RENDERING_INFO, pNext: pointer = nil, flags: VkRenderingFlags, viewMask: uint32, colorAttachmentCount: uint32,pColorAttachmentFormats: ptr VkFormat,depthAttachmentFormat: VkFormat,stencilAttachmentFormat: VkFormat,rasterizationSamples: VkSampleCountFlagBits): VkCommandBufferInheritanceRenderingInfo =
+proc newVkCommandBufferInheritanceRenderingInfo*(sType: VkStructureType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_INHERITANCE_RENDERING_INFO, pNext: pointer = nil, flags: VkRenderingFlags, viewMask: uint32, colorAttachmentCount: uint32,pColorAttachmentFormats: ptr VkFormat,depthAttachmentFormat: VkFormat,stencilAttachmentFormat: VkFormat,rasterizationSamples: VkSampleCountFlagBits): VkCommandBufferInheritanceRenderingInfo =
   result.sType = sType
   result.pNext = pNext
   result.flags = flags
@@ -18272,8 +18272,6 @@ template VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_EXTERNAL_SEMAPHORE_INFO_KHR* =
   VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_EXTERNAL_SEMAPHORE_INFO
 template VK_STRUCTURE_TYPE_EXTERNAL_SEMAPHORE_PROPERTIES_KHR* =
   VK_STRUCTURE_TYPE_EXTERNAL_SEMAPHORE_PROPERTIES
-template VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_ID_PROPERTIES_KHR* =
-  VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_ID_PROPERTIES
 template VK_EXTERNAL_SEMAPHORE_HANDLE_TYPE_OPAQUE_FD_BIT_KHR* =
   VK_EXTERNAL_SEMAPHORE_HANDLE_TYPE_OPAQUE_FD_BIT
 template VK_EXTERNAL_SEMAPHORE_HANDLE_TYPE_OPAQUE_WIN32_BIT_KHR* =
@@ -18537,8 +18535,6 @@ template VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_EXTERNAL_FENCE_INFO_KHR* =
   VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_EXTERNAL_FENCE_INFO
 template VK_STRUCTURE_TYPE_EXTERNAL_FENCE_PROPERTIES_KHR* =
   VK_STRUCTURE_TYPE_EXTERNAL_FENCE_PROPERTIES
-template VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_ID_PROPERTIES_KHR* =
-  VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_ID_PROPERTIES
 template VK_EXTERNAL_FENCE_HANDLE_TYPE_OPAQUE_FD_BIT_KHR* =
   VK_EXTERNAL_FENCE_HANDLE_TYPE_OPAQUE_FD_BIT
 template VK_EXTERNAL_FENCE_HANDLE_TYPE_OPAQUE_WIN32_BIT_KHR* =
