@@ -212,7 +212,6 @@ proc genConstructors(s: XmlNode, output: var string) =
       name = "`{name}`".fmt
     var argType = member.child("type").innerText
     let ptrcheck: int = member.innerText.count("*")
-    echo ptrcheck
     if ptrcheck > 0:
       for i in 0..<ptrcheck:
         argType = "*" & argType
@@ -483,14 +482,14 @@ proc parseRegistery(node: XmlNode, registery: TableRef[string, seq[XmlNode]], ou
             parseRegistery(n, registery, output)
 
 proc main() =
-  if not os.fileExists("vk.xml"):
+  if not os.fileExists("Vulkan-Docs/xml/vk.xml"):
     let client = newHttpClient()
     let glUrl = "https://raw.githubusercontent.com/KhronosGroup/Vulkan-Docs/main/xml/vk.xml"
-    client.downloadFile(glUrl, "vk.xml")
+    client.downloadFile(glUrl, "Vulkan-Docs/xml/vk.xml")
 
   var output = srcHeader & "\n"
 
-  let file = newFileStream("vk.xml", fmRead)
+  let file = newFileStream("Vulkan-Docs/xml/vk.xml", fmRead)
   let xml = file.parseXml()
   var registery: TableRef[string, seq[XmlNode]] = newTable[string, seq[XmlNode]]()
 
